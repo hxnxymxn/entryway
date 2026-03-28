@@ -1,0 +1,169 @@
+@font-face {
+  font-family: 'Geist';
+  src: url('/public/fonts/geist/geist.woff2') format('woff2');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Geist Mono';
+  src: url('/public/fonts/geist/geist-mono.woff2') format('woff2');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'EB Garamond';
+  src: url('/public/fonts/ebg/ebg-serif.woff2') format('woff2');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'EB Garamond';
+  src: url('/public/fonts/ebg/ebg-serif-i.woff2') format('woff2');
+  font-weight: 100 900;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* ── Tokens ────────────────────────────────────────────── */
+:root {
+  --bg:      #FFFFE0;
+  --fg:      #545454;
+  --ink:     rgba(26, 26, 26, 0.80);
+  --grey:    #A9A9A9;
+  --red:     #FF4043;
+  --blue:    #4483DB;
+  --gold:    #FFAA00;
+}
+
+/* ── Reset ─────────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  background: var(--bg);
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── SVG field ─────────────────────────────────────────── */
+svg#field {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: visible;
+  z-index: 0;
+}
+
+/* ── Heading ───────────────────────────────────────────── */
+.heading {
+  position: fixed;
+  top: 16px;
+  left: clamp(32px, 5vw, 64px);
+  z-index: 10;
+  font-family: 'EB Garamond', Georgia, serif;
+  font-weight: 800;
+  font-size: 80px;
+  letter-spacing: 0em;
+  color: var(--ink);
+  line-height: 0.85;
+  text-shadow:
+    0  0  1px rgba(26,26,26,0.15),
+    0  0  4px rgba(26,26,26,0.08),
+    0  0 10px rgba(26,26,26,0.02),
+    1px  1px 2px rgba(26,26,26,0.04),
+   -1px -1px 2px rgba(26,26,26,0.03);
+  opacity: 0;
+  animation: appear 1.2s 0.3s ease forwards;
+}
+
+/* ── jeff.garden wordmark ──────────────────────────────── */
+.wordmark {
+  position: fixed;
+  bottom: 16px;
+  left: clamp(32px, 5vw, 64px);
+  z-index: 10;
+  font-family: 'Geist Mono', monospace;
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: 0em;
+  color: var(--fg);
+  opacity: 0;
+  animation: appear 1.4s 1s ease forwards;
+}
+
+/* ── Poem block ────────────────────────────────────────── */
+.poem-wrap {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  z-index: 10;
+  width: max-content;
+  padding: 12px;
+  background: var(--bg);
+  padding: 16px;
+  margin-bottom: 24px;
+  overflow: hidden;
+  opacity: 0;
+  animation: appear 1.2s 0.7s ease forwards;
+}
+
+.poem-title {
+  font-family: 'Geist Mono', monospace;
+  font-weight: 400;
+  font-size: 9.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--fg);
+  margin-bottom: 0.3em;
+}
+
+.poem-author {
+  font-family: 'Geist Mono', monospace;
+  font-weight: 300;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  color: var(--fg);
+  opacity: 0.52;
+  margin-bottom: .4em;
+}
+
+.poem-body {
+  font-family: 'Geist Mono', monospace;
+  font-weight: 300;
+  font-size: 11px;
+  line-height: 1.3;
+  color: var(--fg);
+  white-space: pre;
+}
+
+.poem-body p { margin: 0; }
+.poem-body p + p { margin-top: 0.3em; }
+
+/* ── Mobile ≤440px ─────────────────────────────────────── */
+@media (max-width: 440px) {
+  
+  .heading      { left: 18px; top: 12px; font-size: 60px; }
+  .wordmark     { left: 8px; bottom: 8px; font-size: 11px; }
+  .poem-wrap    { width: 100%; height: auto; right: 0; left: 0; padding: 8px 8px; }
+  .poem-body    { font-size: 10px; white-space: pre-wrap; }
+  @media (max-width: 440px) {
+  svg#field {
+    top: -15vh;
+  }
+}
+}
+
+/* ── Fade in ────────────────────────────────────────────── */
+@keyframes appear { to { opacity: 1; } }
