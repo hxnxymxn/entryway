@@ -169,3 +169,114 @@ strand(pt2, OFF, '#4483DB')
 
 // ── Eye ───────────────────────────────────────────────────
 mk('circle', { cx: CX, cy: CY, r: 1.5, fill: GREY, opacity: '0.4' }, gF)
+
+// ── Hover interaction ─────────────────────────────────────
+;(function initHover() {
+  const allV  = []
+  const MAX_R = 2000
+
+  /* ── collect eligible elements ──────────────────────────── */
+  const eligible = []
+  // large outer rects only (first rect in each set = indices 0 and 8)
+  const rChildren = [...document.getElementById('g-rects').children]
+  eligible.push(rChildren[0], rChildren[8])
+  // blue ornamental cross + polyline
+  eligible.push(...document.getElementById('g-ornament').children)
+  // red + blue spirals
+  eligible.push(...document.getElementById('g-spirals').children)
+  // yellow tangent only (first child of g-flourish, skip eye circle)
+  eligible.push(document.getElementById('g-flourish').children[0])
+
+  /* ── wrap each eligible element ───────────────────────── */
+  for (const el of eligible) {
+    const parent = el.parentNode
+    const sw = parseFloat(el.getAttribute('stroke-width') || '0')
+    const op = el.getAttribute('opacity') || '1'
+
+    const w = document.createElementNS(NS, 'g')
+    w.classList.add('v')
+    w.setAttribute('opacity', op)
+
+    // hit area (+12 = 6px each side)
+    const h = el.cloneNode(true)
+    h.classList.add('hit')
+    h.setAttribute('stroke', 'transparent')
+    h.setAttribute('stroke-width', String(sw + 12))
+    h.setAttribute('fill', 'none')
+    h.removeAttribute('opacity')
+
+    // wide copy (3px stroke, behind vis, hidden until hover)
+    const wide = el.cloneNode(true)
+    wide.classList.add('wide')
+    if (!el.getAttribute('stroke') || el.getAttribute('stroke') === 'none') {
+      wide.setAttribute('stroke', el.getAttribute('fill') || '#000')
+      wide.setAttribute('fill', 'none')
+    }
+    wide.setAttribute('stroke-width', '3')
+    wide.removeAttribute('opacity')
+
+    el.classList.add('vis')
+    el.removeAttribute('opacity')
+
+    w.appendChild(h)
+    w.appendChild(wide)
+    w.appendChild(el)
+    parent.appendChild(w)
+    allV.push({ g: w, vis: el, wide, busy: false })
+  }
+
+  /* ── activate / lifecycle (CSS clip-path, no JS loop) ── */
+  function activate(idx, cx, cy) {
+    const v = allV[idx]
+    if (v.busy) return
+    v.busy = true
+
+    // convert screen → element local coords, then to fill-box coords
+    const ctm = v.wide.getScreenCTM()
+    if (!ctm) { v.busy = false; return }
+    const lp  = new DOMPoint(cx, cy).matrixTransform(ctm.inverse())
+    const bb  = v.wide.getBBox()
+    const at  = `at ${lp.x - bb.x}px ${lp.y - bb.y}px`
+
+    const s = v.wide.style
+    s.visibility = 'visible'
+    s.transition = 'none'
+    s.clipPath   = `circle(0px ${at})`
+    v.wide.getBoundingClientRect()            // force reflow
+
+    // 3s expand
+    s.transition = 'clip-path 3s linear'
+    s.clipPath   = `circle(${MAX_R}px ${at})`
+
+    setTimeout(() => {
+      // expand done → linger 2s (remove clip so it's fully visible)
+      s.transition = 'none'
+      s.clipPath   = 'none'
+
+      setTimeout(() => {
+        // linger done → 1s retract
+        s.clipPath = `circle(${MAX_R}px ${at})`
+        v.wide.getBoundingClientRect()
+        s.transition = 'clip-path 1s linear'
+        s.clipPath   = `circle(0px ${at})`
+
+        setTimeout(() => {
+          s.visibility = ''
+          s.clipPath   = ''
+          s.transition = ''
+          v.busy = false
+        }, 1050)
+      }, 2000)
+    }, 3050)
+  }
+
+  /* ── event listeners ──────────────────────────────────── */
+  allV.forEach((v, i) => {
+    v.g.addEventListener('mouseenter', (e) => activate(i, e.clientX, e.clientY))
+    v.g.addEventListener('touchstart', (e) => {
+      e.preventDefault()
+      const t = e.touches[0]
+      activate(i, t.clientX, t.clientY)
+    }, { passive: false })
+  })
+})()

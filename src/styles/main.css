@@ -66,27 +66,23 @@ svg#field {
   z-index: 0;
 }
 
-/* ── Heading ───────────────────────────────────────────── */
-.heading {
+/* ── Nav ───────────────────────────────────────────────── */
+.nav {
   position: fixed;
-  top: 16px;
-  left: clamp(32px, 5vw, 64px);
+  top: 20px;
+  left: 20px;
   z-index: 10;
-  font-family: 'EB Garamond', Georgia, serif;
-  font-weight: 800;
-  font-size: 80px;
-  letter-spacing: 0em;
-  color: var(--ink);
-  line-height: 0.85;
-  text-shadow:
-    0  0  1px rgba(26,26,26,0.15),
-    0  0  4px rgba(26,26,26,0.08),
-    0  0 10px rgba(26,26,26,0.02),
-    1px  1px 2px rgba(26,26,26,0.04),
-   -1px -1px 2px rgba(26,26,26,0.03);
+  width: 200px;
   opacity: 0;
   animation: appear 1.2s 0.3s ease forwards;
 }
+.nav svg { display: block; width: 100%; height: auto;
+           filter: drop-shadow(0 1px 3px rgba(0,0,0,0.08)) drop-shadow(0 1px 2px rgba(0,0,0,0.06)); }
+.nav-door > path, .nav-atrium > path, .nav-flora > path { stroke-width: 3; }
+.nav-door, .nav-atrium, .nav-flora { cursor: pointer; }
+.nav-door path, .nav-atrium path, .nav-flora path { transition: stroke 0.2s ease; }
+.nav-door:hover path, .nav-atrium:hover path { stroke: var(--blue); }
+.nav-flora:hover path { stroke: var(--red); }
 
 /* ── jeff.garden wordmark ──────────────────────────────── */
 .wordmark {
@@ -121,30 +117,26 @@ svg#field {
 
 .poem-title {
   font-family: 'Geist Mono', monospace;
-  font-weight: 400;
-  font-size: 14px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--fg);
-  margin-bottom: 0.3em;
+  font-weight: 550;
+  font-size: 17px;
+  color: #4D4D4D;
+  margin-bottom: 4px;
 }
 
 .poem-author {
   font-family: 'Geist Mono', monospace;
-  font-weight: 300;
-  font-size: 14px;
-  letter-spacing: 0.1em;
-  color: var(--fg);
-  opacity: 0.52;
-  margin-bottom: .4em;
+  font-weight: 400;
+  font-size: 15px;
+  color: #4D4D4D;
+  margin-bottom: 20px;
 }
 
 .poem-body {
   font-family: 'Geist Mono', monospace;
-  font-weight: 300;
+  font-weight: 440;
   font-size: 14px;
   line-height: 1.3;
-  color: var(--fg);
+  color: #4D4D4D;
   white-space: pre;
 }
 
@@ -154,7 +146,7 @@ svg#field {
 /* ── Mobile ≤440px ─────────────────────────────────────── */
 @media (max-width: 440px) {
   
-  .heading      { left: 18px; top: 18px; font-size: 60px; }
+  .nav          { left: 12px; top: 12px; width: 160px; }
   /* .wordmark     { left: 8px; bottom: 8px; font-size: 11px; } */
   .poem-wrap    { width: 100%; height: auto; right: 0; left: 0; padding: 16px 16px; }
   .poem-body    { font-size: 14px; white-space: pre-wrap; }
@@ -164,6 +156,11 @@ svg#field {
   }
 }
 }
+
+/* ── Vector hover ──────────────────────────────────────── */
+.v .hit  { pointer-events: stroke; }
+.v .vis  { pointer-events: none; }
+.v .wide { pointer-events: none; visibility: hidden; }
 
 /* ── Fade in ────────────────────────────────────────────── */
 @keyframes appear { to { opacity: 1; } }
