@@ -138,14 +138,7 @@ mk('line', { ...extLine(ocx + cosA, ocy - sinA, ocx - cosA, ocy + sinA),
   stroke: '#4483DB', 'stroke-width': '1', opacity: '0.5', fill: 'none' }, gO)
 mk('line', { ...extLine(ocx + sinA, ocy + cosA, ocx - sinA, ocy - cosA),
   stroke: '#4483DB', 'stroke-width': '1', opacity: '0.5', fill: 'none' }, gO)
-const sq = 8
-const sqPts = [
-  [ocx + cosA * sq,             ocy - sinA * sq],
-  [ocx + cosA * sq + sinA * sq, ocy - sinA * sq + cosA * sq],
-  [ocx +            sinA * sq,  ocy +            cosA * sq],
-].map(([x, y]) => `${x.toFixed(2)},${y.toFixed(2)}`).join(' ')
-mk('polyline', { points: sqPts,
-  stroke: '#4483DB', 'stroke-width': '1', opacity: '0.4', fill: 'none' }, gO)
+
 
 // ── Yellow tangent ────────────────────────────────────────
 const dt = 0.012, T1 = 5.6
@@ -180,7 +173,12 @@ mk('circle', { cx: CX, cy: CY, r: 1.5, fill: GREY, opacity: '0.4' }, gF)
   // large outer rects only (first rect in each set = indices 0 and 8)
   const rChildren = [...document.getElementById('g-rects').children]
   eligible.push(rChildren[0], rChildren[8])
-  // blue ornamental cross + polyline
+  // main diagonals from rect A (first two in g-diags)
+  const dChildren = [...document.getElementById('g-diags').children]
+  eligible.push(dChildren[0], dChildren[1])
+  // windmill crossbars (both lines in g-cross)
+  eligible.push(...document.getElementById('g-cross').children)
+  // blue ornamental cross
   eligible.push(...document.getElementById('g-ornament').children)
   // red + blue spirals
   eligible.push(...document.getElementById('g-spirals').children)
@@ -245,12 +243,12 @@ mk('circle', { cx: CX, cy: CY, r: 1.5, fill: GREY, opacity: '0.4' }, gF)
     s.clipPath   = `circle(0px ${at})`
     v.wide.getBoundingClientRect()            // force reflow
 
-    // 3s expand
-    s.transition = 'clip-path 3s linear'
+    // 2s expand
+    s.transition = 'clip-path 2s linear'
     s.clipPath   = `circle(${MAX_R}px ${at})`
 
-    setTimeout(() => {
-      // expand done → linger 2s (remove clip so it's fully visible)
+    v.wide.addEventListener('transitionend', function onExpand() {
+      // expand done → linger 0.5s (remove clip so it's fully visible)
       s.transition = 'none'
       s.clipPath   = 'none'
 
@@ -261,14 +259,14 @@ mk('circle', { cx: CX, cy: CY, r: 1.5, fill: GREY, opacity: '0.4' }, gF)
         s.transition = 'clip-path 1s linear'
         s.clipPath   = `circle(0px ${at})`
 
-        setTimeout(() => {
+        v.wide.addEventListener('transitionend', function onRetract() {
           s.visibility = ''
           s.clipPath   = ''
           s.transition = ''
           v.busy = false
-        }, 1050)
-      }, 2000)
-    }, 3050)
+        }, { once: true })
+      }, 500)
+    }, { once: true })
   }
 
   /* ── event listeners ──────────────────────────────────── */

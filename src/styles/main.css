@@ -81,7 +81,8 @@ svg#field {
 .nav-door > path, .nav-atrium > path, .nav-flora > path { stroke-width: 3; }
 .nav-door, .nav-atrium, .nav-flora { cursor: pointer; }
 .nav-door path, .nav-atrium path, .nav-flora path { transition: stroke 0.2s ease; }
-.nav-door:hover path, .nav-atrium:hover path { stroke: var(--blue); }
+.nav-door:hover path { stroke: var(--red); }
+.nav-atrium:hover path { stroke: var(--blue); }
 .nav-flora:hover path { stroke: var(--red); }
 
 /* ── jeff.garden wordmark ──────────────────────────────── */
@@ -106,7 +107,6 @@ svg#field {
   right: 0;
   z-index: 10;
   width: max-content;
-  padding: 12px;
   background: var(--bg);
   padding: 16px;
   margin-bottom: 24px;
