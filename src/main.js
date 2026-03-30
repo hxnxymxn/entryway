@@ -135,16 +135,16 @@ const [ocx, ocy] = pt1(T_CROSS)
 const ANG  = 38 * Math.PI / 180
 const cosA = Math.cos(ANG), sinA = Math.sin(ANG)
 mk('line', { ...extLine(ocx + cosA, ocy - sinA, ocx - cosA, ocy + sinA),
-  stroke: '#4483DB', 'stroke-width': '1', opacity: '0.5', fill: 'none' }, gO)
+  stroke: '#9BC2E2', 'stroke-width': '1', opacity: '0.5', fill: 'none' }, gO)
 mk('line', { ...extLine(ocx + sinA, ocy + cosA, ocx - sinA, ocy - cosA),
-  stroke: '#4483DB', 'stroke-width': '1', opacity: '0.5', fill: 'none' }, gO)
+  stroke: '#9BC2E2', 'stroke-width': '1', opacity: '0.5', fill: 'none' }, gO)
 
 
 // ── Yellow tangent ────────────────────────────────────────
 const dt = 0.012, T1 = 5.6
 const [tx0, ty0] = pt1(T1), [tx1, ty1] = pt1(T1 + dt)
 mk('line', { ...extLine(tx0, ty0, tx1, ty1),
-  stroke: '#FFAA00', 'stroke-width': '1', opacity: '0.65', fill: 'none' }, gF)
+  stroke: '#FFD968', 'stroke-width': '1', opacity: '0.65', fill: 'none' }, gF)
 
 // ── Spiral strands ────────────────────────────────────────
 const OFF = 0.12
@@ -155,10 +155,10 @@ function strand(fn, d, color) {
     'stroke-linejoin': 'round', opacity: '0.85', fill: 'none'
   }, gS)
 }
-strand(pt1, 0,   '#FF4043')
-strand(pt1, OFF, '#4483DB')
-strand(pt2, 0,   '#FF4043')
-strand(pt2, OFF, '#4483DB')
+strand(pt1, 0,   '#FF666A')
+strand(pt1, OFF, '#9BC2E2')
+strand(pt2, 0,   '#FF666A')
+strand(pt2, OFF, '#9BC2E2')
 
 // ── Eye ───────────────────────────────────────────────────
 mk('circle', { cx: CX, cy: CY, r: 1.5, fill: GREY, opacity: '0.4' }, gF)
