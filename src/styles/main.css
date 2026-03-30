@@ -154,7 +154,7 @@ svg#field {
     align-items: center;
     justify-content: center;
     position: fixed;
-    bottom: 96px;
+    bottom: 40px;
     left: 16px;
     right: 16px;
     z-index: 10;
@@ -167,6 +167,8 @@ svg#field {
     border: 1px solid rgba(255, 64, 67, 0.6);
     background: var(--bg);
     cursor: pointer;
+    -webkit-user-select: none;
+    user-select: none;
     opacity: 0;
     transition: opacity 0.5s ease, border-width 0.4s ease;
   }
