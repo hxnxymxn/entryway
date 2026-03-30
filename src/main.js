@@ -197,11 +197,12 @@ mk('circle', { cx: CX, cy: CY, r: 1.5, fill: GREY, opacity: '0.4' }, gF)
     w.classList.add('v')
     w.setAttribute('opacity', op)
 
-    // hit area (+12 = 6px each side)
+    // hit area — generous on mobile (20px each side), 6px on desktop
+    const hitPad = window.innerWidth <= 744 ? 40 : 12
     const h = el.cloneNode(true)
     h.classList.add('hit')
     h.setAttribute('stroke', 'transparent')
-    h.setAttribute('stroke-width', String(sw + 12))
+    h.setAttribute('stroke-width', String(sw + hitPad))
     h.setAttribute('fill', 'none')
     h.removeAttribute('opacity')
 
