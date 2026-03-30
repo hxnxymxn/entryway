@@ -280,3 +280,53 @@ mk('circle', { cx: CX, cy: CY, r: 1.5, fill: GREY, opacity: '0.4' }, gF)
     }, { passive: false })
   })
 })()
+
+// ── Poem line rotator (<= 744px) ─────────────────────────
+;(function initPoemLine() {
+  const el   = document.querySelector('.poem-line')
+  const body = document.querySelector('.poem-body')
+  if (!el || !body) return
+
+  const lines = body.textContent.split('\n').map(l => l.trim()).filter(Boolean)
+  let i = 0, busy = false, shown = false
+
+  function color(idx) { return idx % 2 === 0 ? 'red' : 'blue' }
+
+  function show() {
+    if (shown) return
+    shown = true
+    el.textContent = lines[0]
+    el.classList.remove('red', 'blue')
+    el.classList.add(color(0), 'visible')
+  }
+
+  function advance() {
+    if (busy) return
+    busy = true
+
+    // fade out
+    el.classList.remove('visible')
+
+    setTimeout(() => {
+      // swap text and color
+      i = (i + 1) % lines.length
+      el.textContent = lines[i]
+      el.classList.remove('red', 'blue')
+      el.classList.add(color(i))
+
+      // fade in
+      el.classList.add('visible')
+      setTimeout(() => { busy = false }, 550)
+    }, 550)
+  }
+
+  el.addEventListener('click', advance)
+  el.addEventListener('touchstart', advance, { passive: true })
+
+  // show first line on load or resize into mobile
+  function check() {
+    if (window.innerWidth <= 744) show()
+  }
+  window.addEventListener('resize', check)
+  setTimeout(check, 1500)
+})()
